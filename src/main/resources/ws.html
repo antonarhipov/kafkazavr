@@ -8,18 +8,18 @@
                 alert("WebSocket is supported by your Browser!");
 
                 // Let us open a web socket
-                var ws = new WebSocket("ws://localhost:9998/echo");
+                var ws = new WebSocket("ws://localhost:8080/");
 
                 ws.onopen = function () {
 
                     // Web Socket is connected, send data using send()
-                    ws.send("Message to send");
+                    ws.send("Hello!");
                     alert("Message is sent...");
                 };
 
                 ws.onmessage = function (evt) {
                     var received_msg = evt.data;
-                    alert("Message is received...");
+                    alert("Message is received...: " + received_msg);
                 };
 
                 ws.onclose = function () {

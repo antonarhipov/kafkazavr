@@ -2,12 +2,9 @@ package com.example
 
 import io.ktor.application.*
 import io.ktor.config.*
-import io.ktor.features.*
 import io.ktor.html.*
-import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.metrics.micrometer.*
-import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
@@ -22,9 +19,19 @@ fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
-    val config: ApplicationConfig = environment.config.config("ktor.kafka")
-    //print(config)
-    
+
+    operator fun ApplicationConfig.get(key: String): String = property(key).getString()
+
+    val kafka: ApplicationConfig = environment.config.config("ktor.kafka")
+    println("Config: " + kafka.property("bootstrap-servers").getList())
+
+    val consumer: ApplicationConfig = kafka.config("consumer")
+    val producer: ApplicationConfig = kafka.config("producer")
+    val properties: ApplicationConfig = kafka.config("properties")
+
+    println("Consumer group id: ${consumer["group-id"]}")
+    println("Protocol: ${properties["ssl.endpoint.identification.algorithm"]}")
+
     val appMicrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
     install(MicrometerMetrics) {
@@ -78,6 +85,6 @@ fun Application.module() {
             }
         }
     }
-
 }
+
 

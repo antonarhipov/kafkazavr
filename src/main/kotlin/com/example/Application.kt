@@ -1,6 +1,7 @@
 package com.example
 
 import io.ktor.application.*
+import io.ktor.config.*
 import io.ktor.features.*
 import io.ktor.html.*
 import io.ktor.http.*
@@ -21,6 +22,9 @@ fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
+    val config: ApplicationConfig = environment.config.config("ktor.kafka")
+    //print(config)
+    
     val appMicrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
     install(MicrometerMetrics) {

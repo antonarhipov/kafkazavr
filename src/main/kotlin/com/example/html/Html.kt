@@ -2,11 +2,24 @@ package com.example.html
 
 import kotlinx.html.*
 import kotlinx.html.dom.createHTMLDocument
+import kotlinx.html.dom.serialize
 import org.w3c.dom.Document
 
 class Html(mapBoxAccessToken: String) {
 
     val driverHTML: HTML.() -> Unit = {
+        common(mapBoxAccessToken) {
+            js("/assets/driver.js")
+        }
+    }
+
+    val riderHTML: HTML.() -> Unit = {
+        common(mapBoxAccessToken) {
+            js("/assets/rider.js")
+        }
+    }
+
+    private fun HTML.common(mapBoxAccessToken: String, actor: HEAD.() -> Unit) {
         head {
             title {
                 +"Driver"
@@ -15,8 +28,8 @@ class Html(mapBoxAccessToken: String) {
                 unsafe {
                     raw(
                         """
-                        var module = {};
-                    """.trimIndent()
+                            var module = {};
+                        """.trimIndent()
                     )
                 }
             }
@@ -28,8 +41,7 @@ class Html(mapBoxAccessToken: String) {
             css("/webjars/ionicons/2.0.1/css/ionicons.min.css")
             css("https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css")
             css("https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css")
-            js("/assets/common.js")
-            js("/assets/driver.js")
+            actor()
             css("/assets/main.css")
         }
         body {
@@ -61,4 +73,11 @@ class Html(mapBoxAccessToken: String) {
     }
 
     var driver: Document = createHTMLDocument().html(block = driverHTML)
+    var rider: Document = createHTMLDocument().html(block = riderHTML)
+}
+
+fun main() {
+    println(Html("driver-key").driver.serialize())
+    println("--------------------------------")
+    println(Html("rider-key").rider.serialize())
 }

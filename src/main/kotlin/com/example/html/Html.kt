@@ -9,21 +9,24 @@ class Html(mapBoxAccessToken: String) {
 
     val driverHTML: HTML.() -> Unit = {
         common(mapBoxAccessToken) {
+            title {
+                +"Driver"
+            }
             js("/assets/driver.js")
         }
     }
 
     val riderHTML: HTML.() -> Unit = {
         common(mapBoxAccessToken) {
+            title {
+                +"Rider"
+            }
             js("/assets/rider.js")
         }
     }
 
     private fun HTML.common(mapBoxAccessToken: String, actor: HEAD.() -> Unit) {
         head {
-            title {
-                +"Driver"
-            }
             script {
                 unsafe {
                     raw(

@@ -20,16 +20,16 @@ class Html(mapBoxAccessToken: String) {
                     )
                 }
             }
-            scr("https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js")
-            scr("https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js")
-            scr("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js")
-            scr("/webjars/vue/2.1.3/vue.js")
-            scr("/webjars/google-polyline/1.0.0/lib/decode.js")
+            js("https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js")
+            js("https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js")
+            js("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js")
+            js("/webjars/vue/2.1.3/vue.js")
+            js("/webjars/google-polyline/1.0.0/lib/decode.js")
             css("/webjars/ionicons/2.0.1/css/ionicons.min.css")
             css("https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css")
             css("https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css")
-            scr("/assets/common.js")
-            scr("/assets/driver.js")
+            js("/assets/common.js")
+            js("/assets/driver.js")
             css("/assets/main.css")
         }
         body {
@@ -54,7 +54,7 @@ class Html(mapBoxAccessToken: String) {
         link(source, LinkRel.stylesheet)
     }
 
-    private fun HEAD.scr(source: String) {
+    private fun HEAD.js(source: String) {
         script(ScriptType.textJavaScript) {
             src = source
         }

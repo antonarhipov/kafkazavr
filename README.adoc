@@ -1,0 +1,7 @@
+= kafkazavr
+
+== Map functionality
+
+Get Mapbox API key https://account.mapbox.com/access-tokens/create 
+
+

@@ -1,0 +1,28 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#app {
+    height: 30px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+#map {
+    height: auto;
+    width: 100%;
+    position: absolute;
+    top: 40px;
+    bottom: 0;
+}
+
+.marker {
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.mapboxgl-ctrl-directions {
+    display: none;
+}

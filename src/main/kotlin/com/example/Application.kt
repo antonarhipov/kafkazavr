@@ -1,12 +1,16 @@
 package com.example
 
+import com.example.html.Html
 import io.ktor.application.*
 import io.ktor.config.*
 import io.ktor.html.*
+import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
+import io.ktor.http.content.*
 import io.ktor.metrics.micrometer.*
 import io.ktor.response.*
 import io.ktor.routing.*
+import io.ktor.webjars.*
 import io.ktor.websocket.*
 import io.micrometer.prometheus.*
 import kotlinx.html.body
@@ -23,7 +27,8 @@ fun Application.module() {
     operator fun ApplicationConfig.get(key: String): String = property(key).getString()
 
     val kafka: ApplicationConfig = environment.config.config("ktor.kafka")
-    println("Config: " + kafka.property("bootstrap-servers").getList())
+    val mapBox: ApplicationConfig = environment.config.config("ktor.mapbox")
+    // println("Config: " + kafka.property("bootstrap-servers").getList())
 
     val consumer: ApplicationConfig = kafka.config("consumer")
     val producer: ApplicationConfig = kafka.config("producer")
@@ -44,21 +49,17 @@ fun Application.module() {
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
-    routing {
-        get("/") {
-            call.respondHtml {
 
-                head {
-                    title {
-                        +"Blah blah"
-                    }
-                }
-                body {
-                    h1 {
-                        +"Hello folks!"
-                    }
-                }
-            }
+    install(Webjars)
+    routing {
+        static("assets") {
+            resources("META-INF/resources/assets")
+        }
+        get("/") {
+            call.respondHtml(
+                HttpStatusCode.OK,
+                Html(mapBox["api-key"]).driverHTML
+            )
         }
     }
     routing {

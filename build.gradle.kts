@@ -32,4 +32,10 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-html-builder:$ktor_version")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+
+    //region webjars
+    implementation("io.ktor:ktor-webjars:$ktor_version")
+    implementation("org.webjars:vue:2.1.3")
+    implementation("org.webjars:ionicons:2.0.1")
+    implementation("org.webjars.npm:google-polyline:1.0.0")
 }

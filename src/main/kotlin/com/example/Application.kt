@@ -24,6 +24,7 @@ fun main(args: Array<String>): Unit =
 
 fun Application.module() {
 
+    //region Reading Kafka configuration
     operator fun ApplicationConfig.get(key: String): String = property(key).getString()
 
     val kafka: ApplicationConfig = environment.config.config("ktor.kafka")
@@ -36,9 +37,10 @@ fun Application.module() {
 
     println("Consumer group id: ${consumer["group-id"]}")
     println("Protocol: ${properties["ssl.endpoint.identification.algorithm"]}")
+    //endregion
 
+    //region Install features
     val appMicrometerRegistry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
-
     install(MicrometerMetrics) {
         registry = appMicrometerRegistry
         // ...
@@ -49,25 +51,26 @@ fun Application.module() {
         maxFrameSize = Long.MAX_VALUE
         masking = false
     }
-
     install(Webjars)
+    //endregion
+
+    //region Configure routing
     routing {
         static("assets") {
             resources("META-INF/resources/assets")
         }
+
         get("/") {
             call.respondHtml(
                 HttpStatusCode.OK,
                 Html(mapBox["api-key"]).driverHTML
             )
         }
-    }
-    routing {
+
         get("/metrics-micrometer") {
             call.respond(appMicrometerRegistry.scrape())
         }
-    }
-    routing {
+
         webSocket("/") { // websocketSession
             for (frame in incoming) {
                 when (frame) {
@@ -86,6 +89,7 @@ fun Application.module() {
             }
         }
     }
+    //endregion
 }
 
 

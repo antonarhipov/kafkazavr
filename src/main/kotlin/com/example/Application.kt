@@ -13,10 +13,6 @@ import io.ktor.routing.*
 import io.ktor.webjars.*
 import io.ktor.websocket.*
 import io.micrometer.prometheus.*
-import kotlinx.html.body
-import kotlinx.html.h1
-import kotlinx.html.head
-import kotlinx.html.title
 import java.time.*
 
 fun main(args: Array<String>): Unit =

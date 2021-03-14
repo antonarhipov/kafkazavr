@@ -12,8 +12,9 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.webjars.*
 import io.ktor.websocket.*
-import io.micrometer.prometheus.*
-import java.time.*
+import io.micrometer.prometheus.PrometheusConfig
+import io.micrometer.prometheus.PrometheusMeterRegistry
+import java.time.Duration
 
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
@@ -56,10 +57,17 @@ fun Application.module() {
             resources("META-INF/resources/assets")
         }
 
-        get("/") {
+        get("/driver") {
             call.respondHtml(
                 HttpStatusCode.OK,
                 Html(mapBox["api-key"]).driverHTML
+            )
+        }
+
+        get("/rider") {
+            call.respondHtml(
+                HttpStatusCode.OK,
+                Html(mapBox["api-key"]).riderHTML
             )
         }
 
@@ -67,7 +75,7 @@ fun Application.module() {
             call.respond(appMicrometerRegistry.scrape())
         }
 
-        webSocket("/") { // websocketSession
+        webSocket("/driver") { // websocketSession
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {
@@ -76,6 +84,20 @@ fun Application.module() {
                         if (text.equals("bye", ignoreCase = true)) {
                             close(CloseReason(CloseReason.Codes.NORMAL, "Client said BYE"))
                         }
+                    }
+                    is Frame.Binary -> TODO()
+                    is Frame.Close -> TODO()
+                    is Frame.Ping -> TODO()
+                    is Frame.Pong -> TODO()
+                }
+            }
+        }
+
+        webSocket("/rider") { // websocketSession
+            for (frame in incoming) {
+                when (frame) {
+                    is Frame.Text -> {
+                        val text = frame.readText()
                     }
                     is Frame.Binary -> TODO()
                     is Frame.Close -> TODO()

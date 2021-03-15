@@ -10,11 +10,8 @@ import io.ktor.routing.*
 import io.ktor.webjars.*
 import java.time.Duration
 
-operator fun ApplicationConfig.get(key: String): String = try {
-    property(key).getString()
-} catch (e: ApplicationConfigurationException) {
-    ""
-}
+operator fun ApplicationConfig.get(key: String): String =
+    propertyOrNull(key)?.getString() ?: ""
 
 fun Application.module() {
 

@@ -13,7 +13,6 @@ import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 

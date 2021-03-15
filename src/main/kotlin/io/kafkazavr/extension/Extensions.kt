@@ -14,24 +14,6 @@ operator fun ApplicationConfig.get(key: String): String =
     propertyOrNull(key)?.getString() ?: ""
 
 fun Application.module() {
-
-    val producer = buildProducer<String, String>(environment)
-
-    //region Reading Kafka configuration
-
-//
-//    val kafka: ApplicationConfig = environment.config.config("ktor.kafka")
-    val mapBox: ApplicationConfig = environment.config.config("ktor.mapbox")
-//    // println("Config: " + kafka.property("bootstrap-servers").getList())
-//
-//    val consumer: ApplicationConfig = kafka.config("consumer")
-//    val producer: ApplicationConfig = kafka.config("producer")
-//    val properties: ApplicationConfig = kafka.config("properties")
-//
-//    println("Consumer group id: ${consumer["group-id"]}")
-//    println("Protocol: ${properties["ssl.endpoint.identification.algorithm"]}")
-    //endregion
-
     //region Install features
     install(io.ktor.websocket.WebSockets) {
         pingPeriod = Duration.ofSeconds(15)
@@ -40,8 +22,6 @@ fun Application.module() {
         masking = false
     }
     install(Webjars)
-
-    install(Kafka)
     //endregion
 
     //region Configure routing

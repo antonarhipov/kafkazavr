@@ -44,3 +44,11 @@ ws.send(JSON.stringify({rider: uuid})); // for rider
 ----
 
 
+== Run Rider and Driver apps separately
+
+Add command line argument:
+
+* For driver app: -config=src/main/resources/driver.conf
+* For rider app: -config=src/main/resources/rider.conf
+
+To run both modules in the same application, just run as usual, without -config. In this caser, application.conf will be used

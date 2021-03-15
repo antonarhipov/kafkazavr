@@ -1,6 +1,5 @@
 package io.kafkazavr.driver
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.kafkazavr.extension.get
 import io.kafkazavr.html.Html
 import io.kafkazavr.kafka.buildProducer

@@ -31,4 +31,14 @@ docker exec -it broker /usr/bin/kafka-console-consumer --topic driver --bootstra
 <4> check if everything is there
 <5> read driver topic
 
+== test js
+
+[source,javascript]
+.filename
+----
+var ws = new WebSocket(wsUrl);
+ws.send(JSON.stringify({driver: uuid})); // for driver
+ws.send(JSON.stringify({rider: uuid})); // for rider
+----
+
 

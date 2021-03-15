@@ -1,12 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    <root level="trace">
-        <appender-ref ref="STDOUT"/>
-    </root>
-    <logger name="org.eclipse.jetty" level="INFO"/>
-    <logger name="io.netty" level="INFO"/>
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>
+            %yellow(%d{yyyy-MM-dd HH:mm:ss}) %cyan(%logger{50}) %highlight([%p]) %green((%file:%line\)) - %msg%n
+        </pattern>
+    </encoder>
+</appender>
+
+<root level="info">
+    <appender-ref ref="STDOUT"/>
+</root>
+<logger name="org.eclipse.jetty" level="INFO"/>
+<logger name="io.netty" level="INFO"/>
+
+<appender name="CONSUMER" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+        <pattern>
+            %yellow(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%p]) %magenta((%file:%line\)) - %msg%n
+        </pattern>
+    </encoder>
+</appender>
+
+<root level="INFO">
+    <appender-ref ref="STDOUT"/>
+</root>
 </configuration>

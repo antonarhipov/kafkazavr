@@ -11,6 +11,10 @@ import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.routing.*
 import io.ktor.websocket.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
 
@@ -33,9 +37,8 @@ fun Application.module() {
                 when (frame) {
                     is Frame.Text -> {
                         val text = frame.readText()
-                        val mapper = ObjectMapper() // TODO: reuse
-                        val message = mapper.readTree(text) // TODO: avoid blocking call
-                        val key: String = message.get("driver").asText()
+                        val json: JsonElement = Json.parseToJsonElement(text)
+                        val key = json.jsonObject["driver"].toString()
                         producer.send(ProducerRecord("driver", key, text))
                     }
                     is Frame.Binary -> TODO()

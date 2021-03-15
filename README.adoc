@@ -1,7 +1,14 @@
 = kafkazavr
 
+How to use Kotlin and Ktor to build applications which share geographical coordinates.
+
 == Map functionality
 
-Get Mapbox API key https://account.mapbox.com/access-tokens/create 
+NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create 
+
+== TODO
+
+* [x] modules for driver and rider
+* [x] routes to separate file 
 
 

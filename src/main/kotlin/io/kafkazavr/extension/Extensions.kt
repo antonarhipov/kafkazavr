@@ -3,17 +3,18 @@ package io.kafkazavr.extension
 import io.kafkazavr.feature.Kafka
 import io.kafkazavr.kafka.buildProducer
 import io.ktor.application.*
-import io.ktor.config.ApplicationConfig
+import io.ktor.config.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.http.content.*
 import io.ktor.routing.*
 import io.ktor.webjars.*
 import java.time.Duration
 
-operator fun ApplicationConfig.get(key: String): String = property(key).getString()
-
-
-
+operator fun ApplicationConfig.get(key: String): String = try {
+    property(key).getString()
+} catch (e: ApplicationConfigurationException) {
+    ""
+}
 
 fun Application.module() {
 

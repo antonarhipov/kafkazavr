@@ -24,7 +24,7 @@ fun Application.module() {
         get("/driver") {
             call.respondHtml(
                 HttpStatusCode.OK,
-                Html(mapBox["api-key"], "http://localhost:8080/driver-ws").driverHTML
+                Html(mapBox["api-key"], "ws://localhost:8080/driver-ws").driverHTML
             )
         }
 

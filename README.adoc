@@ -12,4 +12,23 @@ NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create
 * [x] routes to separate file
 * [ ] js files for rider UI
 
+== Kafka 
+
+[source,bash]
+.docker stuff
+----
+# TODO: replace with TC
+docker-compose up -d    #<1>
+docker exec -it broker /usr/bin/kafka-topics --bootstrap-server broker:29092 --create --topic driver --partitions 3    #<2>
+docker exec -it broker /usr/bin/kafka-topics --bootstrap-server broker:9092 --create --topic rider --partitions 3   #<3>
+docker exec -it broker /usr/bin/kafka-topics --bootstrap-server broker:9092 --list    #<4>
+
+docker exec -it broker /usr/bin/kafka-console-consumer --topic driver --bootstrap-server broker:9092 --property print.key=true --from-beginning #<5>
+----
+<1> start zk and ak
+<2> create driver topic
+<3> create rider topic
+<4> check if everything is there
+<5> read driver topic
+
 

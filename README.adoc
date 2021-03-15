@@ -9,6 +9,7 @@ NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create
 == TODO
 
 * [x] modules for driver and rider
-* [x] routes to separate file 
+* [x] routes to separate file
+* [ ] js files for rider UI
 
 

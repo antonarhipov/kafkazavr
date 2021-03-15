@@ -24,11 +24,11 @@ fun Application.module() {
         get("/driver") {
             call.respondHtml(
                 HttpStatusCode.OK,
-                Html(mapBox["api-key"]).driverHTML
+                Html(mapBox["api-key"], "http://localhost:8080/driver-ws").driverHTML
             )
         }
 
-        webSocket("/driver") {
+        webSocket("/driver-ws") {
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {

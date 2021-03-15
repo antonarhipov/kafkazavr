@@ -19,10 +19,10 @@ fun Application.module() {
         get("/rider") {
             call.respondHtml(
                 HttpStatusCode.OK,
-                Html(mapBox["api-key"]).riderHTML
+                Html(mapBox["api-key"], "http://localhost:8080/rider-ws").riderHTML
             )
         }
-        webSocket("/rider") { // websocketSession
+        webSocket("/rider-ws") { // websocketSession
             for (frame in incoming) {
                 when (frame) {
                     is Frame.Text -> {

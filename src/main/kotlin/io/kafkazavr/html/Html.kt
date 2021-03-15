@@ -5,10 +5,10 @@ import kotlinx.html.dom.createHTMLDocument
 import kotlinx.html.dom.serialize
 import org.w3c.dom.Document
 
-class Html(mapBoxAccessToken: String) {
+class Html(private val mapBoxAccessToken: String, private val wsUrl: String) {
 
     val driverHTML: HTML.() -> Unit = {
-        common(mapBoxAccessToken) {
+        common {
             title {
                 +"Driver"
             }
@@ -17,7 +17,7 @@ class Html(mapBoxAccessToken: String) {
     }
 
     val riderHTML: HTML.() -> Unit = {
-        common(mapBoxAccessToken) {
+        common {
             title {
                 +"Rider"
             }
@@ -25,13 +25,14 @@ class Html(mapBoxAccessToken: String) {
         }
     }
 
-    private fun HTML.common(mapBoxAccessToken: String, actor: HEAD.() -> Unit) {
+    private fun HTML.common(actor: HEAD.() -> Unit) {
         head {
             script {
                 unsafe {
                     raw(
                         """
                             var module = {};
+                            var wsUrl = "$wsUrl";
                         """.trimIndent()
                     )
                 }
@@ -81,7 +82,7 @@ class Html(mapBoxAccessToken: String) {
 }
 
 fun main() {
-    println(Html("driver-key").driver.serialize())
+    println(Html("driver-key", "http://localhost:8080").driver.serialize())
     println("--------------------------------")
-    println(Html("rider-key").rider.serialize())
+    println(Html("rider-key", "http://localhost:8080").rider.serialize())
 }

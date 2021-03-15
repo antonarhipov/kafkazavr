@@ -1,5 +1,6 @@
 package io.kafkazavr.feature
 
+import com.typesafe.config.Config
 import io.ktor.application.*
 import io.ktor.config.*
 import io.ktor.util.*
@@ -16,7 +17,6 @@ class Kafka(configuration: Configuration) {
         var someParameterName : String? = null
 
     }
-
     companion object Feature : ApplicationFeature<Application, Configuration, Kafka> {
         override val key: AttributeKey<Kafka>
             get() = AttributeKey("Kafka")

@@ -1,4 +1,4 @@
-package com.example.feature
+package io.kafkazavr.feature
 
 import io.ktor.application.*
 import io.ktor.config.*

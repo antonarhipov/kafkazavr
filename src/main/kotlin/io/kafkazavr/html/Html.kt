@@ -1,4 +1,4 @@
-package com.example.html
+package io.kafkazavr.html
 
 import kotlinx.html.*
 import kotlinx.html.dom.createHTMLDocument
@@ -41,6 +41,7 @@ class Html(mapBoxAccessToken: String) {
             js("https://api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js")
             js("/webjars/vue/2.1.3/vue.js")
             js("/webjars/google-polyline/1.0.0/lib/decode.js")
+            js("/assets/common.js")
             css("/webjars/ionicons/2.0.1/css/ionicons.min.css")
             css("https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css")
             css("https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css")

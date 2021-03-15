@@ -1,6 +1,7 @@
 package io.kafkazavr.extension
 
 import io.kafkazavr.feature.Kafka
+import io.kafkazavr.kafka.buildProducer
 import io.ktor.application.*
 import io.ktor.config.ApplicationConfig
 import io.ktor.http.cio.websocket.*
@@ -11,7 +12,12 @@ import java.time.Duration
 
 operator fun ApplicationConfig.get(key: String): String = property(key).getString()
 
+
+
+
 fun Application.module() {
+
+    val producer = buildProducer<String, String>(environment)
 
     //region Reading Kafka configuration
 
@@ -37,9 +43,7 @@ fun Application.module() {
     }
     install(Webjars)
 
-    install(Kafka) {
-        someParameterName = "hello"
-    }
+    install(Kafka)
     //endregion
 
     //region Configure routing

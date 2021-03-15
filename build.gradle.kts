@@ -31,7 +31,7 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-html-builder:$ktor_version")
-    
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.12.0")
     //region Kafka and Confluent
     implementation("org.apache.kafka:kafka-clients:2.7.0")
     

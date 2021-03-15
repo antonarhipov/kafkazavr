@@ -1,9 +1,9 @@
 package io.kafkazavr.feature
 
-import com.typesafe.config.Config
+import io.kafkazavr.kafka.buildProducer
 import io.ktor.application.*
-import io.ktor.config.*
 import io.ktor.util.*
+import org.apache.kafka.clients.producer.KafkaProducer
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -13,10 +13,12 @@ class Kafka(configuration: Configuration) {
 
     private val someParameterName = configuration.someParameterName
 
-    class Configuration {
-        var someParameterName : String? = null
+    lateinit var producer: KafkaProducer<String, String>
 
+    class Configuration {
+        var someParameterName: String? = null
     }
+
     companion object Feature : ApplicationFeature<Application, Configuration, Kafka> {
         override val key: AttributeKey<Kafka>
             get() = AttributeKey("Kafka")
@@ -24,22 +26,7 @@ class Kafka(configuration: Configuration) {
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kafka {
             val configuration = Configuration().apply(configure)
             val kafkaFeature = Kafka(configuration)
-
-            log.info(">>>>>>> Configuring Kafka feature")
-
-            operator fun ApplicationConfig.get(key: String): String = property(key).getString()
-
-            val kafka: ApplicationConfig = pipeline.environment.config.config("ktor.kafka")
-            val mapBox: ApplicationConfig = pipeline.environment.config.config("ktor.mapbox")
-            // println("Config: " + kafka.property("bootstrap-servers").getList())
-
-            val consumer: ApplicationConfig = kafka.config("consumer")
-            val producer: ApplicationConfig = kafka.config("producer")
-            val properties: ApplicationConfig = kafka.config("properties")
-
-            log.info(">>>>>>> Consumer group id: ${consumer["group-id"]}")
-            log.info(">>>>>>> Protocol: ${properties["ssl.endpoint.identification.algorithm"]}")
-
+            kafkaFeature.producer = buildProducer(pipeline.environment)
             return kafkaFeature
         }
 

@@ -24,13 +24,6 @@ operator fun ApplicationConfig.get(key: String): String =
 
 fun Application.module() {
 
-    val configFile = File(object {}.javaClass.getResource("kafka.conf").toURI())
-    val config = ConfigFactory.parseFile(configFile)
-    for (entry in config.entrySet()) {
-        println("${entry.key}: ${entry.value.render()}")
-    }
-
-
 //    configureKafkaTopics(): TODO
 
     //region Install features

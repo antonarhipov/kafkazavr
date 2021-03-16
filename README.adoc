@@ -43,7 +43,6 @@ ws.send(JSON.stringify({driver: uuid})); // for driver
 ws.send(JSON.stringify({rider: uuid})); // for rider
 ----
 
-
 == Run Rider and Driver apps separately
 
 Add command line argument:
@@ -51,4 +50,16 @@ Add command line argument:
 * For driver app: -config=src/main/resources/driver.conf
 * For rider app: -config=src/main/resources/rider.conf
 
-To run both modules in the same application, just run as usual, without -config. In this caser, application.conf will be used
+To run both modules in the same application, just run as usual, without `-config`. 
+In this case, `application.conf` will be used
+
+[source,bash]
+.Run Rider and Driver apps separately
+----
+./gradlew build #<1>
+java -cp build/libs/kafkazavr-0.0.1-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/driver.conf #<2>
+java -cp build/libs/kafkazavr-0.0.1-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/rider.conf  #<3>
+----
+<1> build shadow jar 
+<2> run driver service
+<3> run rider app

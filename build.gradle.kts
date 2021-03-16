@@ -1,6 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.Coroutines
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
@@ -9,12 +6,26 @@ val prometeus_version: String by project
 plugins {
     application
     kotlin("jvm") version "1.4.10"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 group = "com.example"
 version = "0.0.1"
+
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
+    // TODO: mainClass.set doesn't work with shadowJar ???
+    // ref https://ktor.io/docs/fatjar.html#fat-jar-gradle 
+    mainClassName = "io.kafkazavr.Application"
+}
+
+tasks.withType<Jar> {
+    manifest {
+        attributes(
+            mapOf(
+                "Main-Class" to application.mainClassName
+            )
+        )
+    }
 }
 
 repositories {
@@ -34,7 +45,7 @@ dependencies {
     implementation("io.ktor:ktor-html-builder:$ktor_version")
     //region Kafka and Confluent
     implementation("org.apache.kafka:kafka-clients:2.7.0")
-    
+
     //endregion
 
     //region webjars
@@ -43,6 +54,6 @@ dependencies {
     implementation("org.webjars:ionicons:2.0.1")
     implementation("org.webjars.npm:google-polyline:1.0.0")
     //endregion
-    
+
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }

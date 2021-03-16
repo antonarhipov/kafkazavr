@@ -89,7 +89,9 @@ fun Application.actor(role: String) {
     log.info("Websocket url: {}", wsUrl)
     routing {
         get("/${role}") {
-            kafkaConsumer = createKafkaConsumer(config, "rider")
+            log.info("Creating kafka consumer for $role")
+            //TODO: ugly stuff
+            kafkaConsumer = createKafkaConsumer(config, if(role == "driver") "rider" else "driver")
 
             call.respondHtml(
                 HttpStatusCode.OK,

@@ -59,7 +59,7 @@ class Html(private val mapBoxAccessToken: String, private val wsUrl: String) {
         body {
             div {
                 id = "app"
-                +"Your Driver ID: {{ uuid }}"
+                +"Your ID: {{ uuid }}"
             }
             div { id = "map" }
             script {

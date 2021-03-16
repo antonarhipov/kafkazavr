@@ -4,10 +4,16 @@ import io.kafkazavr.feature.Kafka
 import io.kafkazavr.kafka.buildProducer
 import io.ktor.application.*
 import io.ktor.config.*
+import io.ktor.html.*
+import io.ktor.http.*
 import io.ktor.http.cio.websocket.*
 import io.ktor.http.content.*
 import io.ktor.routing.*
 import io.ktor.webjars.*
+import kotlinx.html.a
+import kotlinx.html.body
+import kotlinx.html.dom.createHTMLDocument
+import kotlinx.html.p
 import java.time.Duration
 
 operator fun ApplicationConfig.get(key: String): String =
@@ -28,6 +34,22 @@ fun Application.module() {
     routing {
         static("assets") {
             resources("META-INF/resources/assets")
+        }
+        get("/") {
+            call.respondHtml {
+                body {
+                    p {
+                        a("/driver", "_blank") {
+                            +"Driver"
+                        }
+                    }
+                    p {
+                        a("/rider", "_blank") {
+                            +"rider"
+                        }
+                    }
+                }
+            }
         }
     }
     //endregion

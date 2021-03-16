@@ -130,7 +130,9 @@ fun String.splitPair(ch: Char): Pair<String, String>? = indexOf(ch).let { idx ->
 }
 
 fun parseConfiguration(): Config {
-    val configFile = ArgsHolder.args.mapNotNull { it.splitPair('=') }.toMap()["-config"]?.let { File(it) }
+//    val configFile = ArgsHolder.args.mapNotNull { it.splitPair('=') }.toMap()["-config"]?.let { File(it) }
+
+    val configFile = File("src/main/resources/driver.conf")
     val config: Config = ConfigFactory.parseFile(configFile)
     return config
 }

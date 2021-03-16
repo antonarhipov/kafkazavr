@@ -1,10 +1,8 @@
 package io.kafkazavr
 
-import io.kafkazavr.extension.splitPair
-import java.io.File
-
 fun main(args: Array<String>) {
-    // TODO workaround!!! 
+    // TODO workaround!!!
+    // This workaround doesn't work. args are not visible in a module.
     ArgsHolder.args = args
     io.ktor.server.netty.EngineMain.main(args)
 }

@@ -19,7 +19,6 @@ fun <K, V> buildProducer(config: Config): KafkaProducer<K, V> {
         putAll(commonConfig)
         put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers.unwrapped())
     }
-    KafkaProducer<String, String>(producerProperties)
 
     return KafkaProducer(producerProperties)
 }

@@ -1,5 +1,6 @@
 package io.kafkazavr.extension
 
+import com.typesafe.config.ConfigFactory
 import io.kafkazavr.feature.Kafka
 import io.kafkazavr.kafka.buildProducer
 import io.kafkazavr.kafka.configureKafkaTopics
@@ -15,12 +16,20 @@ import kotlinx.html.a
 import kotlinx.html.body
 import kotlinx.html.dom.createHTMLDocument
 import kotlinx.html.p
+import java.io.File
 import java.time.Duration
 
 operator fun ApplicationConfig.get(key: String): String =
     propertyOrNull(key)?.getString() ?: ""
 
 fun Application.module() {
+
+    val configFile = File(object {}.javaClass.getResource("kafka.conf").toURI())
+    val config = ConfigFactory.parseFile(configFile)
+    for (entry in config.entrySet()) {
+        println("${entry.key}: ${entry.value.render()}")
+    }
+
 
 //    configureKafkaTopics(): TODO
 

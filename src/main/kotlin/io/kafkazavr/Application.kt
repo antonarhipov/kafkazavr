@@ -1,7 +1,14 @@
 package io.kafkazavr
 
-fun main(args: Array<String>): Unit =
+import io.kafkazavr.extension.splitPair
+import java.io.File
+
+fun main(args: Array<String>): Unit {
+    // TODO workaround!!! 
+    ArgsHolder.args = args
     io.ktor.server.netty.EngineMain.main(args)
+}
 
-
-
+object ArgsHolder {
+    lateinit var args: Array<String>
+}

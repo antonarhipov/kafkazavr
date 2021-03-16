@@ -60,3 +60,10 @@ fun Application.module() {
     }
     //endregion
 }
+
+fun String.splitPair(ch: Char): Pair<String, String>? = indexOf(ch).let { idx ->
+    when (idx) {
+        -1 -> null
+        else -> Pair(take(idx), drop(idx + 1))
+    }
+}

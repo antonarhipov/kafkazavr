@@ -2,6 +2,7 @@ package io.kafkazavr.extension
 
 import io.kafkazavr.feature.Kafka
 import io.kafkazavr.kafka.buildProducer
+import io.kafkazavr.kafka.configureKafkaTopics
 import io.ktor.application.*
 import io.ktor.config.*
 import io.ktor.html.*
@@ -20,6 +21,9 @@ operator fun ApplicationConfig.get(key: String): String =
     propertyOrNull(key)?.getString() ?: ""
 
 fun Application.module() {
+
+//    configureKafkaTopics(): TODO
+
     //region Install features
     install(io.ktor.websocket.WebSockets) {
         pingPeriod = Duration.ofSeconds(15)

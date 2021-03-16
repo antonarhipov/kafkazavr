@@ -10,7 +10,7 @@ NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create
 
 * [x] modules for driver and rider
 * [x] routes to separate file
-* [ ] js files for rider UI
+* [x] js files for rider UI
 * [ ] create topics via config 
 
 == Kafka 
@@ -32,16 +32,6 @@ docker exec -it broker /usr/bin/kafka-console-consumer --topic rider --bootstrap
 <3> create rider topic
 <4> check if everything is there
 <5> read driver topic
-
-== test js
-
-[source,javascript]
-.filename
-----
-var ws = new WebSocket(wsUrl);
-ws.send(JSON.stringify({driver: uuid})); // for driver
-ws.send(JSON.stringify({rider: uuid})); // for rider
-----
 
 == Run Rider and Driver apps separately
 

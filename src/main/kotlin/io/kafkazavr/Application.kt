@@ -3,7 +3,7 @@ package io.kafkazavr
 import io.kafkazavr.extension.splitPair
 import java.io.File
 
-fun main(args: Array<String>): Unit {
+fun main(args: Array<String>) {
     // TODO workaround!!! 
     ArgsHolder.args = args
     io.ktor.server.netty.EngineMain.main(args)

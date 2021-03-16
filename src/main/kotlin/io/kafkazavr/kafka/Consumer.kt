@@ -1,41 +1,36 @@
 package io.kafkazavr.kafka
 
-import io.kafkazavr.extension.get
-import io.ktor.application.*
-import io.ktor.config.*
-import org.apache.kafka.clients.consumer.ConsumerConfig.*
+import com.typesafe.config.Config
 import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.clients.producer.ProducerConfig
 import java.util.*
 
 
-fun <K, V> buildConsumer(environment: ApplicationEnvironment): KafkaConsumer<K, V> {
-    val config: ApplicationConfig = environment.config.config("ktor.kafka.consumer")
-    val kafka = environment.config.config("ktor.kafka")
-    //val commonConfig: ApplicationConfig = environment.config.config("ktor.kafka.properties")
+fun <K, V> buildConsumer(config: Config): KafkaConsumer<K, V> {
+    val bootstrapServers = config.getList("ktor.kafka.bootstrap.servers")
 
-    val producerProps = Properties().apply {
-        this[BOOTSTRAP_SERVERS_CONFIG] = kafka.property("bootstrap.servers").getList()
-        this[GROUP_ID_CONFIG] = config.property("group.id").getString()
-        this[KEY_DESERIALIZER_CLASS_CONFIG] = config["key.deserializer"]
-        this[VALUE_DESERIALIZER_CLASS_CONFIG] = config["value.deserializer"]
+    // common config
+    val commonConfig =
+        config.getConfig("ktor.kafka.properties").entrySet().associateBy({ it.key }, { it.value.unwrapped() })
 
-        /*this["ssl.endpoint.identification.algorithm"] = commonConfig["ssl.endpoint.identification.algorithm"]
-        this["sasl.mechanism"] = commonConfig["sasl.mechanism"]
-        this["request.timeout.ms"] = commonConfig["request.timeout.ms"]
-        this["retry.backoff.ms"] = commonConfig["retry.backoff.ms"]
-        this["sasl.jaas.config"] = commonConfig["sasl.jaas.config"]
-        this["security.protocol"] = commonConfig["security.protocol"]*/
+    // get consumer config
+    val consumerConfig =
+        config.getConfig("ktor.kafka.consumer").entrySet().associateBy({ it.key }, { it.value.unwrapped() })
+
+    val consumerProperties: Properties = Properties().apply {
+        putAll(commonConfig)
+        putAll(consumerConfig)
+        put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers.unwrapped())
     }
 
-    return KafkaConsumer(producerProps)
-
+    return KafkaConsumer(consumerProperties)
 }
 
 fun <K, V> createKafkaConsumer(
-    environment: ApplicationEnvironment,
-    topic: String
+    config: Config,
+    topic: String,
 ): KafkaConsumer<K, V> {
-    val consumer = buildConsumer<K, V>(environment)
+    val consumer = buildConsumer<K, V>(config)
     consumer.subscribe(listOf(topic))
     return consumer
 }

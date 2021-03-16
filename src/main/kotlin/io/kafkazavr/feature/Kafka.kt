@@ -26,7 +26,7 @@ class Kafka(configuration: Configuration) {
         override fun install(pipeline: Application, configure: Configuration.() -> Unit): Kafka {
             val configuration = Configuration().apply(configure)
             val kafkaFeature = Kafka(configuration)
-            kafkaFeature.producer = buildProducer(pipeline.environment)
+//            kafkaFeature.producer = buildProducer(pipeline.environment)
             return kafkaFeature
         }
 

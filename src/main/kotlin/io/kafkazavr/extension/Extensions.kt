@@ -36,7 +36,7 @@ fun Application.module() {
 //    configureKafkaTopics(): TODO
 
     //region Install features
-    install(io.ktor.websocket.WebSockets) {
+    install(WebSockets) {
         pingPeriod = Duration.ofSeconds(15)
         timeout = Duration.ofSeconds(15)
         maxFrameSize = Long.MAX_VALUE
@@ -80,7 +80,9 @@ fun Application.actor(role: String) {
 
     val wsEndpointPath = "/${role}-ws"
     val wsUrl = "ws://" +
-            InetAddress.getLocalHost().hostName + ":" +
+            //TODO: this doesn't seem to always work
+//            InetAddress.getLocalHost().hostName + ":" +
+            "localhost:" +
             environment.config.config("ktor.deployment")["port"] +
             wsEndpointPath
 
@@ -100,6 +102,8 @@ fun Application.actor(role: String) {
                 when (frame) {
                     is Frame.Text -> {
                         val text = frame.readText()
+                        log.trace("Received frame: $text")
+
                         val json: JsonElement = Json.parseToJsonElement(text)
                         val key = json.jsonObject[role].toString()
 

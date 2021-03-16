@@ -25,6 +25,13 @@ class Html(private val mapBoxAccessToken: String, private val wsUrl: String) {
         }
     }
 
+    val options = mapOf(
+        "rider" to riderHTML,
+        "driver" to driverHTML
+    )
+
+    operator fun get(key: String): HTML.() -> Unit = options[key]!!
+
     private fun HTML.common(actor: HEAD.() -> Unit) {
         head {
             script {

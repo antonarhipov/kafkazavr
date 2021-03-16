@@ -60,7 +60,7 @@ fun Application.module() {
                     }
                     p {
                         a("/rider", "_blank") {
-                            +"rider"
+                            +"Rider"
                         }
                     }
                 }
@@ -91,7 +91,7 @@ fun Application.actor(role: String) {
 
             call.respondHtml(
                 HttpStatusCode.OK,
-                Html(mapBox["api-key"], wsUrl).driverHTML
+                Html(mapBox["api-key"], wsUrl)[role]
             )
         }
 

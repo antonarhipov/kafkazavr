@@ -87,14 +87,13 @@ fun Application.actor(role: String) {
     log.info("Websocket url: {}", wsUrl)
     routing {
         get("/${role}") {
-            log.info("Creating kafka consumer for $role")
-            //TODO: ugly stuff
-            kafkaConsumer = createKafkaConsumer(config, if (role == "driver") "rider" else "driver")
-
             call.respondHtml(
                 HttpStatusCode.OK,
                 Html(mapBox["api-key"], wsUrl)[role]
             )
+            log.info("Creating kafka consumer for $role")
+            //TODO: ugly stuff
+            kafkaConsumer = createKafkaConsumer(config, if (role == "driver") "rider" else "driver")
         }
 
         webSocket(wsEndpointPath) {
@@ -111,15 +110,12 @@ fun Application.actor(role: String) {
                         .map { it.value() as String }
                         .forEach { outgoing.send(Frame.Text(it)) }
                 }
-            } catch (e: ClosedReceiveChannelException) {
+            } finally {
                 kafkaConsumer.apply {
                     unsubscribe()
                     close()
                 }
                 log.info("consumer for $role unsubscribed and closed...")
-            } catch (e: Throwable) {
-                println("onError ${closeReason.await()}")
-                e.printStackTrace()
             }
         }
     }

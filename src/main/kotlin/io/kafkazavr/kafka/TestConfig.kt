@@ -3,6 +3,7 @@ package io.kafkazavr.kafka
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import io.kafkazavr.ArgsHolder
+import io.kafkazavr.extension.configMap
 import io.kafkazavr.extension.splitPair
 import org.apache.kafka.clients.admin.AdminClient
 import org.apache.kafka.clients.consumer.KafkaConsumer
@@ -20,15 +21,15 @@ fun main(args: Array<String>) {
 
     val bootstrapServers = config.getList("ktor.kafka.bootstrap.servers")
     println(bootstrapServers.unwrapped())
-    
+
     // common config
-    val commonConfig = config.getConfig("ktor.kafka.properties").entrySet().associateBy({ it.key }, { it.value.unwrapped() })
+    val commonConfig = configMap(config, "ktor.kafka.properties")
 
     // get consumer config
-    val consumerConfig = config.getConfig("ktor.kafka.consumer").entrySet().associateBy({ it.key }, { it.value.unwrapped() })
+    val consumerConfig = configMap(config, "ktor.kafka.consumer")
 
     // get producer config
-    val producerConfig = config.getConfig("ktor.kafka.producer").entrySet().associateBy({ it.key }, { it.value.unwrapped() })
+    val producerConfig = configMap(config, "ktor.kafka.producer")
     // creating properties
     val producerProperties: Properties = Properties().apply {
         putAll(producerConfig)

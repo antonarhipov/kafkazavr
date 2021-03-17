@@ -1,21 +1,19 @@
 package io.kafkazavr.kafka
 
 import com.typesafe.config.Config
+import io.kafkazavr.extension.configMap
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.ProducerConfig
 import java.util.*
-
 
 fun <K, V> buildConsumer(config: Config): KafkaConsumer<K, V> {
     val bootstrapServers = config.getList("ktor.kafka.bootstrap.servers")
 
     // common config
-    val commonConfig =
-        config.getConfig("ktor.kafka.properties").entrySet().associateBy({ it.key }, { it.value.unwrapped() })
+    val commonConfig = configMap(config, "ktor.kafka.properties")
 
     // get consumer config
-    val consumerConfig =
-        config.getConfig("ktor.kafka.consumer").entrySet().associateBy({ it.key }, { it.value.unwrapped() })
+    val consumerConfig = configMap(config, "ktor.kafka.consumer")
 
     val consumerProperties: Properties = Properties().apply {
         putAll(commonConfig)
@@ -26,10 +24,7 @@ fun <K, V> buildConsumer(config: Config): KafkaConsumer<K, V> {
     return KafkaConsumer(consumerProperties)
 }
 
-fun <K, V> createKafkaConsumer(
-    config: Config,
-    topic: String,
-): KafkaConsumer<K, V> {
+fun <K, V> createKafkaConsumer(config: Config, topic: String): KafkaConsumer<K, V> {
     val consumer = buildConsumer<K, V>(config)
     consumer.subscribe(listOf(topic))
     return consumer

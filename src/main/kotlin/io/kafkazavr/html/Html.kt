@@ -64,9 +64,8 @@ class Html(private val mapBoxAccessToken: String, private val wsUrl: String) {
             div { id = "map" }
             script {
                 unsafe {
-                    raw(
-                        """
-                            mapboxgl.accessToken = "$mapBoxAccessToken";
+                    raw("""
+                        mapboxgl.accessToken = "$mapBoxAccessToken";
                     """.trimIndent()
                     )
                 }

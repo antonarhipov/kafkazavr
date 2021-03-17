@@ -3,6 +3,7 @@ package io.kafkazavr.extension
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
 import io.kafkazavr.html.Html
+import io.kafkazavr.kafka.Kafka
 import io.kafkazavr.kafka.buildProducer
 import io.kafkazavr.kafka.createKafkaConsumer
 import io.ktor.application.*
@@ -14,7 +15,6 @@ import io.ktor.http.content.*
 import io.ktor.routing.*
 import io.ktor.webjars.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.html.a
 import kotlinx.html.body
 import kotlinx.html.p
@@ -32,7 +32,10 @@ operator fun ApplicationConfig.get(key: String): String =
 
 fun Application.module() {
 
-//    configureKafkaTopics(): TODO
+    install(Kafka) {
+        configurationPath = ""
+        topics = listOf("rider", "driver")
+    }
 
     //region Install features
     install(WebSockets) {

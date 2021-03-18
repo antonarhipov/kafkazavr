@@ -22,6 +22,9 @@
     <logger name="org.apache.kafka.clients" level="INFO" additivity="false">
         <appender-ref ref="KAFKA"/>
     </logger>
+    <logger name="io.kafkazavr" level="DEBUG" additivity="false">
+        <appender-ref ref="KAFKA"/>
+    </logger>
     
     <root level="INFO">
         <appender-ref ref="STDOUT"/>

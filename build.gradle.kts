@@ -15,7 +15,7 @@ version = "0.0.1"
 application {
     // TODO: mainClass.set doesn't work with shadowJar ???
     // ref https://ktor.io/docs/fatjar.html#fat-jar-gradle 
-    mainClassName = "io.kafkazavr.Application"
+    mainClassName = "io.kafkazavr.ApplicationKt"
 }
 
 tasks.withType<Jar> {

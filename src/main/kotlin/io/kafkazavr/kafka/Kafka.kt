@@ -1,43 +1,52 @@
 package io.kafkazavr.kafka
 
+import com.typesafe.config.Config
+import com.typesafe.config.ConfigFactory
+import io.kafkazavr.extension.configMap
+import io.kafkazavr.extension.logger
 import io.ktor.application.*
 import io.ktor.util.*
 import org.apache.kafka.clients.admin.AdminClient
-import org.apache.kafka.common.config.TopicConfig
+import org.apache.kafka.clients.admin.CreateTopicsResult
+import org.apache.kafka.clients.admin.NewTopic
+import org.apache.kafka.clients.producer.ProducerConfig
+import org.apache.kafka.clients.producer.ProducerConfig.BOOTSTRAP_SERVERS_CONFIG
+import java.io.File
 import java.util.*
 
 class Kafka(configuration: Configuration) {
+    private val log = logger<Kafka>()
     private val configurationPath = configuration.configurationPath
+
     private val topics = configuration.topics
 
     class Configuration {
         var configurationPath: String = ""
-        var topics: List<String> = emptyList()
+        var topics: List<NewTopic> = emptyList()
     }
 
     private fun createTopics() {
         val properties: Properties = getProperties(configurationPath)
 
         val adminClient = AdminClient.create(properties)
-        val createTopicsResult = adminClient.createTopics(
-            topics.map {
-                newTopic(it) {
-                    partitions = 3
-                    replicas = 1
-                    configs = mapOf(
-                        TopicConfig.CLEANUP_POLICY_COMPACT to "compact",
-                    )
-                }
-            }
-        )
+        val createTopicsResult: CreateTopicsResult = adminClient.createTopics(topics)
 
-        //TODO: check createTopicsResult. If anything's wrong - throw exception?
+        createTopicsResult.values().forEach { (k, _) ->
+            log.debug("Topic {} created...", k)
+        }
     }
 
-    private fun getProperties(configurationPath: String?): Properties {
-        val properties = Properties()
-        properties.setProperty("a", "b")
-        return properties
+    private fun getProperties(configurationPath: String): Properties {
+        val configFile = File(configurationPath)
+        val config: Config = ConfigFactory.parseFile(configFile)
+
+        val bootstrapServers = config.getList("ktor.kafka.bootstrap.servers")
+        val commonConfig = configMap(config, "ktor.kafka.properties")
+
+        return Properties().apply {
+            putAll(commonConfig)
+            put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers.unwrapped())
+        }
     }
 
     companion object Feature : ApplicationFeature<Application, Configuration, Kafka> {
@@ -49,7 +58,6 @@ class Kafka(configuration: Configuration) {
             val kafkaFeature = Kafka(configuration)
 
             kafkaFeature.createTopics()
-
             return kafkaFeature
         }
 

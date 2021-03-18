@@ -5,7 +5,10 @@ import org.apache.kafka.clients.admin.CreateTopicsResult
 import org.apache.kafka.clients.admin.NewTopic
 import org.apache.kafka.common.config.TopicConfig
 import java.util.*
-
+/*
+    example of Kafka Admin API usage
+ */
+@SuppressWarnings("unused")
 fun configureKafkaTopics(config: Properties, vararg topics: String): CreateTopicsResult {
     return kafkaAdmin(config) {
         createTopics(topics.map {
@@ -20,14 +23,10 @@ fun configureKafkaTopics(config: Properties, vararg topics: String): CreateTopic
     }
 }
 
-fun kafkaAdmin(props: Properties, block: AdminClient.() -> CreateTopicsResult): CreateTopicsResult {
-    val adminClient = AdminClient.create(props)
-    return adminClient.run(block)
-}
+fun kafkaAdmin(props: Properties, block: AdminClient.() -> CreateTopicsResult): CreateTopicsResult =
+    AdminClient.create(props).run(block)
 
-fun newTopic(name: String, block: TopicBuilder.() -> Unit): NewTopic {
-    val topicBuilder = TopicBuilder(name).apply(block)
-    return topicBuilder.build()
-}
+fun newTopic(name: String, block: TopicBuilder.() -> Unit): NewTopic =
+    TopicBuilder(name).apply(block).build()
 
 

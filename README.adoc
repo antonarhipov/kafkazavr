@@ -4,14 +4,14 @@ How to use Kotlin and Ktor to build applications which share geographical coordi
 
 == Map functionality
 
-NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create 
+NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create
 
 == TODO
 
 * [x] modules for driver and rider
 * [x] routes to separate file
 * [x] js files for rider UI
-* [ ] create topics via config 
+* [x] create topics via config
 
 == Kafka 
 
@@ -20,18 +20,15 @@ NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create
 ----
 # TODO: replace with TC
 docker-compose up -d    #<1>
-docker exec -it broker /usr/bin/kafka-topics --bootstrap-server broker:9092 --create --topic driver --partitions 3    #<2>
-docker exec -it broker /usr/bin/kafka-topics --bootstrap-server broker:9092 --create --topic rider --partitions 3   #<3>
-docker exec -it broker /usr/bin/kafka-topics --bootstrap-server broker:9092 --list    #<4>
+docker exec -it broker /usr/bin/kafka-topics --bootstrap-server broker:9092 --list    #<2>
 
-docker exec -it broker /usr/bin/kafka-console-consumer --topic driver --bootstrap-server broker:9092 --property print.key=true --from-beginning #<5>
-docker exec -it broker /usr/bin/kafka-console-consumer --topic rider --bootstrap-server broker:9092 --property print.key=true --from-beginning #<6>
+docker exec -it broker /usr/bin/kafka-console-consumer --topic driver --bootstrap-server broker:9092 --property print.key=true --from-beginning #<3>
+docker exec -it broker /usr/bin/kafka-console-consumer --topic rider --bootstrap-server broker:9092 --property print.key=true --from-beginning #<4>
 ----
 <1> start zk and ak
-<2> create driver topic
-<3> create rider topic
-<4> check if everything is there
-<5> read driver topic
+<2> check if everything is there
+<3> read driver topic
+<4> read rider topic
 
 == Run Rider and Driver apps separately
 
@@ -40,7 +37,7 @@ Add command line argument:
 * For driver app: -config=src/main/resources/driver.conf
 * For rider app: -config=src/main/resources/rider.conf
 
-To run both modules in the same application, just run as usual, without `-config`. 
+To run both modules in the same application, just run as usual, without `-config`.
 In this case, `application.conf` will be used
 
 [source,bash]
@@ -49,7 +46,11 @@ In this case, `application.conf` will be used
 ./gradlew build #<1>
 java -cp build/libs/kafkazavr-0.0.1-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/driver.conf #<2>
 java -cp build/libs/kafkazavr-0.0.1-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/rider.conf  #<3>
+
+# or same with Gradle application plugin
+./gradlew run --args="-config=src/main/resources/driver.conf" #<2>
+./gradlew run --args="-config=src/main/resources/rider.conf"  #<3>
 ----
-<1> build shadow jar 
-<2> run driver service
+<1> build shadow jar
+<2> run driver app
 <3> run rider app

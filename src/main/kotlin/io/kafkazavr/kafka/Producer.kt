@@ -8,10 +8,8 @@ import java.util.*
 
 fun <K, V> buildProducer(config: Config): KafkaProducer<K, V> {
     val bootstrapServers = config.getList("ktor.kafka.bootstrap.servers")
-
     // common config
     val commonConfig = configMap(config, "ktor.kafka.properties")
-
     // get producer config
     val producerConfig = configMap(config, "ktor.kafka.producer")
     // creating properties
@@ -20,6 +18,5 @@ fun <K, V> buildProducer(config: Config): KafkaProducer<K, V> {
         putAll(commonConfig)
         put(BOOTSTRAP_SERVERS_CONFIG, bootstrapServers.unwrapped())
     }
-
     return KafkaProducer(producerProperties)
 }

@@ -20,7 +20,6 @@ fun <K, V> buildConsumer(config: Config): KafkaConsumer<K, V> {
         putAll(consumerConfig)
         put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers.unwrapped())
     }
-
     return KafkaConsumer(consumerProperties)
 }
 

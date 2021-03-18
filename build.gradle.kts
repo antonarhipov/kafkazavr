@@ -7,6 +7,7 @@ plugins {
     application
     kotlin("jvm") version "1.4.10"
     id("com.github.johnrengelman.shadow") version "6.1.0"
+    id("com.avast.gradle.docker-compose") version "0.14.1"
 }
 
 group = "com.example"

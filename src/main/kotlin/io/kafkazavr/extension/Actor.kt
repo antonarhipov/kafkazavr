@@ -1,9 +1,9 @@
 package io.kafkazavr.extension
 
 import com.typesafe.config.Config
+import io.confluent.developer.ktor.buildProducer
+import io.confluent.developer.ktor.createKafkaConsumer
 import io.kafkazavr.html.Html
-import io.kafkazavr.kafka.buildProducer
-import io.kafkazavr.kafka.createKafkaConsumer
 import io.ktor.application.*
 import io.ktor.config.*
 import io.ktor.html.*
@@ -42,8 +42,8 @@ fun Application.actor(role: String) {
                 Html(mapBox["api-key"], wsUrl)[role]
             )
             log.info("Creating kafka consumer for $role")
-            //TODO: ugly stuff
             kafkaConsumer = createKafkaConsumer(config, if (role == "driver") "rider" else "driver")
+            
         }
 
         webSocket(wsEndpointPath) {

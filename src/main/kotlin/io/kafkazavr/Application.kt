@@ -1,7 +1,9 @@
 package io.kafkazavr
 
-import io.kafkazavr.kafka.Kafka
-import io.kafkazavr.kafka.newTopic
+
+
+import io.confluent.developer.ktor.Kafka
+import io.confluent.developer.ktor.newTopic
 import io.ktor.application.*
 import io.ktor.html.*
 import io.ktor.http.cio.websocket.*
@@ -37,13 +39,13 @@ fun Application.module() {
         topics = listOf(
             newTopic("rider") {
                 partitions = 3
-                replicas = 1 // for docker
-                //replicas = 3 // for cloud
+                //replicas = 1 // for docker
+                replicas = 3 // for cloud
             },
             newTopic("driver") {
                 partitions = 3
-                replicas = 1 // for docker
-                //replicas = 3 // for cloud
+                //replicas = 1 // for docker
+                replicas = 3 // for cloud
             }
         )
     }

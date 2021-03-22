@@ -19,6 +19,8 @@ application {
     mainClassName = "io.kafkazavr.ApplicationKt"
 }
 
+dockerCompose.isRequiredBy(project.tasks.named("run"))
+
 tasks.withType<Jar> {
     manifest {
         attributes(
@@ -33,6 +35,9 @@ repositories {
     mavenLocal()
     jcenter()
     maven { url = uri("https://kotlin.bintray.com/ktor") }
+    maven {
+        url = uri("https://jitpack.io")
+    }
 }
 
 dependencies {
@@ -46,7 +51,7 @@ dependencies {
     implementation("io.ktor:ktor-html-builder:$ktor_version")
     //region Kafka and Confluent
     implementation("org.apache.kafka:kafka-clients:2.7.0")
-
+    implementation("com.github.gAmUssA:ktor-kafka:main-SNAPSHOT")
     //endregion
 
     //region webjars

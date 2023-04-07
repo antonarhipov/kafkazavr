@@ -2,7 +2,7 @@ package io.kafkazavr.extension
 
 import com.typesafe.config.Config
 import com.typesafe.config.ConfigFactory
-import io.ktor.config.*
+import io.ktor.server.config.*
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.io.File

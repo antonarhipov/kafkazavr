@@ -1,9 +1,9 @@
 ---
-version: '2'
+version: '3.7'
 
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.0.0
+    image: confluentinc/cp-zookeeper:7.3.1
     hostname: zookeeper
     container_name: zookeeper
     ports:
@@ -13,7 +13,7 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-kafka:6.0.0
+    image: confluentinc/cp-kafka:7.3.1
     hostname: broker
     container_name: broker
     depends_on:
@@ -28,4 +28,27 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_TOOLS_LOG4J_LOGLEVEL: ERROR
-    
+
+  console:
+    hostname: console
+    container_name: console
+    image: docker.redpanda.com/vectorized/console:master-173596f
+    restart: on-failure
+    entrypoint: /bin/sh
+    command: -c "echo \"$$CONSOLE_CONFIG_FILE\" > /tmp/config.yml; /app/console"
+    environment:
+      CONFIG_FILEPATH: /tmp/config.yml
+      CONSOLE_CONFIG_FILE: |
+        server:
+          listenPort: 9080
+        kafka:
+          brokers: ["broker:9092"]
+          schemaRegistry:
+            enabled: false
+        connect:
+          enabled: false
+    ports:
+      - "9080:9080"
+    depends_on:
+      - broker
+      - schema-registry

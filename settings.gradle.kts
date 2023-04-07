@@ -1,1 +1,1 @@
-rootProject.name = "kafkazavr"
+rootProject.name = "org.kafkainaction.klyft"

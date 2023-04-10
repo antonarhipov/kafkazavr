@@ -1,7 +1,6 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
-val prometeus_version: String by project
 val ak_version: String by project
 
 plugins {
@@ -9,14 +8,14 @@ plugins {
     kotlin("jvm") version "1.8.20"
     id("io.ktor.plugin") version "2.2.4"
     id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
-    id("com.github.johnrengelman.shadow") version "6.1.0"
-    id("com.avast.gradle.docker-compose") version "0.14.1"
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.avast.gradle.docker-compose") version "0.16.12"
 }
 
 group = "org.kafkainaction"
 version = "0.0.1"
-application {
 
+application {
     mainClass.set("io.kafkazavr.ApplicationKt")
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
@@ -42,17 +41,16 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-webjars-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
-    implementation("io.ktor:ktor-serialization-jackson-jvm:$ktor_version")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-html-builder-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-websockets-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-core")
+    implementation("io.ktor:ktor-server-webjars")
+    implementation("io.ktor:ktor-server-content-negotiation")
+    implementation("io.ktor:ktor-serialization-jackson")
+    implementation("io.ktor:ktor-serialization-kotlinx-json")
+    implementation("io.ktor:ktor-server-html-builder")
+    implementation("io.ktor:ktor-server-websockets")
+    implementation("io.ktor:ktor-server-netty")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
     //region Kafka and Confluent
     implementation("org.apache.kafka:kafka-clients:$ak_version")
     implementation("com.github.gamussa:ktor-kafka:89ebc28cf9")
@@ -64,5 +62,6 @@ dependencies {
     implementation("org.webjars.npm:google-polyline:1.0.0")
     //endregion
 
-    testImplementation("io.ktor:ktor-server-tests:$ktor_version")
+    testImplementation("io.ktor:ktor-server-tests")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

@@ -16,8 +16,8 @@ fun String.splitPair(ch: Char): Pair<String, String>? = indexOf(ch).let { idx ->
     }
 }
 
-fun parseConfiguration(path: String): Config =
-    ConfigFactory.parseFile(File(path))
+fun parseConfiguration(path: String): ApplicationConfig =
+    HoconApplicationConfig(ConfigFactory.parseFile(File(path)))
 
 fun configMap(config: Config, path: String): Map<String, Any> =
     config.getConfig(path).entrySet().associateBy({ it.key }, { it.value.unwrapped() })

@@ -1,15 +1,13 @@
 package io.kafkazavr
 
-
-
 import io.confluent.developer.ktor.Kafka
 import io.confluent.developer.ktor.newTopic
-import io.ktor.application.*
-import io.ktor.html.*
-import io.ktor.http.cio.websocket.*
-import io.ktor.http.content.*
-import io.ktor.routing.*
-import io.ktor.webjars.*
+import io.ktor.server.application.*
+import io.ktor.server.html.*
+import io.ktor.server.http.content.*
+import io.ktor.server.routing.*
+import io.ktor.server.webjars.*
+import io.ktor.server.websocket.*
 import kotlinx.html.a
 import kotlinx.html.body
 import kotlinx.html.p
@@ -25,7 +23,7 @@ fun Application.module() {
     //endregion
 
     //region Websockets
-    install(io.ktor.websocket.WebSockets) {
+    install(WebSockets) {
         pingPeriod = Duration.ofSeconds(15)
         timeout = Duration.ofSeconds(15)
         maxFrameSize = Long.MAX_VALUE

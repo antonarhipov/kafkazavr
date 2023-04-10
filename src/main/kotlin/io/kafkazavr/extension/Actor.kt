@@ -1,6 +1,6 @@
 package io.kafkazavr.extension
 
-import com.typesafe.config.Config
+import io.confluent.developer.ktor.buildProducer
 import io.confluent.developer.ktor.createKafkaConsumer
 import io.kafkazavr.html.Html
 import io.ktor.http.*
@@ -15,11 +15,12 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerRecord
 import java.time.Duration
 
 
 fun Application.actor(role: String) {
-    val config: Config = parseConfiguration("src/main/resources/kafka-${role}.conf")
+    val config = parseConfiguration("src/main/resources/kafka-${role}.conf")
 
     val mapBox: ApplicationConfig = environment.config.config("ktor.mapbox")
     val producer: KafkaProducer<String, String> = buildProducer(config)
@@ -40,7 +41,7 @@ fun Application.actor(role: String) {
                 HttpStatusCode.OK,
                 Html(mapBox["api-key"], wsUrl)[role]
             )
-            log.info("Creating kafka consumer for {}", role)
+            this@actor.log.info("Creating kafka consumer for {}", role)
             kafkaConsumer = createKafkaConsumer(config, if (role == "driver") "rider" else "driver")
             
         }
@@ -49,7 +50,7 @@ fun Application.actor(role: String) {
             try {
                 for (frame in incoming) {
                     val text = (frame as Frame.Text).readText()
-                    log.trace("Received frame: $text")
+                    //this@actor.log.trace("Received frame: $text")
                     val json: JsonElement = Json.parseToJsonElement(text)
                     val key = json.jsonObject[role].toString()
 
@@ -64,7 +65,7 @@ fun Application.actor(role: String) {
                     unsubscribe()
                     close()
                 }
-                log.info("consumer for $role unsubscribed and closed...")
+                this@actor.log.info("consumer for $role unsubscribed and closed...")
             }
         }
     }

@@ -2,21 +2,24 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val prometeus_version: String by project
+val ak_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.8.20"
+    id("io.ktor.plugin") version "2.2.4"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.20"
     id("com.github.johnrengelman.shadow") version "6.1.0"
     id("com.avast.gradle.docker-compose") version "0.14.1"
 }
 
-group = "com.example"
+group = "org.kafkainaction"
 version = "0.0.1"
-
 application {
-    // TODO: mainClass.set doesn't work with shadowJar ???
-    // ref https://ktor.io/docs/fatjar.html#fat-jar-gradle 
-    mainClassName = "io.kafkazavr.ApplicationKt"
+
+    mainClass.set("io.kafkazavr.ApplicationKt")
+    val isDevelopment: Boolean = project.ext.has("development")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
 dockerCompose.isRequiredBy(project.tasks.named("run"))
@@ -25,37 +28,37 @@ tasks.withType<Jar> {
     manifest {
         attributes(
             mapOf(
-                "Main-Class" to application.mainClassName
+                "Main-Class" to application.mainClass
             )
         )
     }
 }
 
 repositories {
-    mavenLocal()
-    jcenter()
-    maven { url = uri("https://kotlin.bintray.com/ktor") }
+    mavenCentral()
     maven {
         url = uri("https://jitpack.io")
     }
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core:$ktor_version")
-    implementation("io.ktor:ktor-metrics-micrometer:$ktor_version")
-    implementation("io.micrometer:micrometer-registry-prometheus:$prometeus_version")
-    implementation("io.ktor:ktor-websockets:$ktor_version")
-    implementation("io.ktor:ktor-server-netty:$ktor_version")
-    implementation("io.ktor:ktor-serialization:$ktor_version")
+    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-webjars-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
+    implementation("io.ktor:ktor-serialization-jackson-jvm:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-html-builder-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-websockets-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-html-builder:$ktor_version")
+    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
     //region Kafka and Confluent
-    implementation("org.apache.kafka:kafka-clients:2.7.0")
-    implementation("com.github.gAmUssA:ktor-kafka:main-SNAPSHOT")
+    implementation("org.apache.kafka:kafka-clients:$ak_version")
+    implementation("com.github.gamussa:ktor-kafka:89ebc28cf9")
     //endregion
 
     //region webjars
-    implementation("io.ktor:ktor-webjars:$ktor_version")
     implementation("org.webjars:vue:2.1.3")
     implementation("org.webjars:ionicons:2.0.1")
     implementation("org.webjars.npm:google-polyline:1.0.0")

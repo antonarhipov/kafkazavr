@@ -1,23 +1,22 @@
 package io.kafkazavr.extension
 
 import com.typesafe.config.Config
-import io.confluent.developer.ktor.buildProducer
 import io.confluent.developer.ktor.createKafkaConsumer
 import io.kafkazavr.html.Html
-import io.ktor.application.*
-import io.ktor.config.*
-import io.ktor.html.*
 import io.ktor.http.*
-import io.ktor.http.cio.websocket.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.config.*
+import io.ktor.server.html.*
+import io.ktor.server.routing.*
+import io.ktor.server.websocket.*
 import io.ktor.websocket.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.jsonObject
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
-import org.apache.kafka.clients.producer.ProducerRecord
 import java.time.Duration
+
 
 fun Application.actor(role: String) {
     val config: Config = parseConfiguration("src/main/resources/kafka-${role}.conf")
@@ -41,7 +40,7 @@ fun Application.actor(role: String) {
                 HttpStatusCode.OK,
                 Html(mapBox["api-key"], wsUrl)[role]
             )
-            log.info("Creating kafka consumer for $role")
+            log.info("Creating kafka consumer for {}", role)
             kafkaConsumer = createKafkaConsumer(config, if (role == "driver") "rider" else "driver")
             
         }

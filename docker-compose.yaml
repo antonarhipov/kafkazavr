@@ -51,4 +51,3 @@ services:
       - "9080:9080"
     depends_on:
       - broker
-      - schema-registry

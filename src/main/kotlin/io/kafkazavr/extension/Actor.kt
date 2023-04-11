@@ -26,12 +26,7 @@ fun Application.actor(role: String) {
     val producer: KafkaProducer<String, String> = buildProducer(config)
     
     val wsEndpointPath = "/${role}-ws"
-    val wsUrl = "ws://" +
-            //TODO: this doesn't seem to always work
-//            InetAddress.getLocalHost().hostName + ":" +
-            "localhost:" +
-            environment.config.config("ktor.deployment")["port"] +
-            wsEndpointPath
+    val wsUrl = "ws://localhost:${environment.config.config("ktor.deployment")["port"]}$wsEndpointPath"
 
     lateinit var kafkaConsumer: KafkaConsumer<String, String>
     log.info("Websocket url: {}", wsUrl)
@@ -43,7 +38,6 @@ fun Application.actor(role: String) {
             )
             this@actor.log.info("Creating kafka consumer for {}", role)
             kafkaConsumer = createKafkaConsumer(config, if (role == "driver") "rider" else "driver")
-            
         }
 
         webSocket(wsEndpointPath) {

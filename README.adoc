@@ -6,14 +6,32 @@ How to use Kotlin and Ktor to build applications which share geographical coordi
 
 NOTE: Get Mapbox API key https://account.mapbox.com/access-tokens/create
 
-== TODO
+== Run Rider and Driver apps separately
 
-* [x] modules for driver and rider
-* [x] routes to separate file
-* [x] js files for rider UI
-* [x] create topics via config
+Add command line argument:
 
-== Kafka 
+* For driver app: -config=src/main/resources/driver.conf
+* For rider app: -config=src/main/resources/rider.conf
+
+To run both modules in the same application, just run as usual, without `-config`.
+In this case, `application.conf` will be used
+
+[source,bash]
+.Run Rider and Driver apps separately
+----
+./gradlew build #<1>
+java -cp build/libs/org.kafkainaction.klyft-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/driver.conf #<2>
+java -cp build/libs/org.kafkainaction.klyft-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/rider.conf  #<3>
+
+# or same with Gradle application plugin
+./gradlew run --args="-config=src/main/resources/driver.conf" #<2>
+./gradlew run --args="-config=src/main/resources/rider.conf"  #<3>
+----
+<1> build shadow jar
+<2> run driver app
+<3> run rider app
+
+== Kafka
 
 [source,bash]
 .docker stuff
@@ -30,27 +48,15 @@ docker exec -it broker /usr/bin/kafka-console-consumer --topic rider --bootstrap
 <3> read driver topic
 <4> read rider topic
 
-== Run Rider and Driver apps separately
+Open browser at http://localhost:9080 for Redpanda Kafka Console
 
-Add command line argument:
+.Check if rider and driver topics are there 
+image::images/rpconsole-list_of_topics.png[]
 
-* For driver app: -config=src/main/resources/driver.conf
-* For rider app: -config=src/main/resources/rider.conf
+.Check if data streams through driver(rider) topics
+image::images/rpconsole-driver_topic.png[]
 
-To run both modules in the same application, just run as usual, without `-config`.
-In this case, `application.conf` will be used
 
-[source,bash]
-.Run Rider and Driver apps separately
-----
-./gradlew build #<1>
-java -cp build/libs/kafkazavr-0.0.1-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/driver.conf #<2>
-java -cp build/libs/kafkazavr-0.0.1-all.jar io.kafkazavr.ApplicationKt -config=src/main/resources/rider.conf  #<3>
 
-# or same with Gradle application plugin
-./gradlew run --args="-config=src/main/resources/driver.conf" #<2>
-./gradlew run --args="-config=src/main/resources/rider.conf"  #<3>
-----
-<1> build shadow jar
-<2> run driver app
-<3> run rider app
+
+

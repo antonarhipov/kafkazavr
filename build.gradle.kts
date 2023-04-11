@@ -62,7 +62,7 @@ dependencies {
 
     //region Kafka and Confluent
     implementation("org.apache.kafka:kafka-clients:$ak_version")
-    implementation("com.github.gamussa:ktor-kafka:89ebc28cf9")
+    implementation("com.github.gamussa:ktor-kafka:b8851354d2")
     //endregion
 
     //region webjars
